@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">My Fridge</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="Reset">Reset</string>
+    <string name="Notif">Notification at: 10:00</string>
+    <string name="Share">Share</string>
+    <string name="Your_food">Your food</string>
+    <string name="Expire">set expiration date</string>
+    <string name="expireAt">"Expires : "</string>
+    <string name="ItemAdded">Item added !</string>
+    <string name="Notificate">"Notification at "</string>
+    <string name="Deleted">Item deleted !</string>
+    <string name="Sharer">In my fridge there is:</string>
+    <string name="ShareTitle">Share !</string>
+    <string name="food">food</string>
+    <string name="Your">"Your "</string>
+    <string name="Will">" will expire !"</string>
+    <string name="Exp">"Expires : "</string>
+</resources>
