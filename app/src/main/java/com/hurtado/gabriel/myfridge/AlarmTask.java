@@ -29,7 +29,8 @@ class AlarmTask implements Runnable{
 
     @Override
     public void run() {
-        Calendar dateComp=date;
+        Calendar dateComp;
+        dateComp = (Calendar) date.clone();
         dateComp.add(Calendar.DAY_OF_MONTH,1);
         long time=dateComp.getTimeInMillis();
         long time2=Calendar.getInstance().getTimeInMillis();
