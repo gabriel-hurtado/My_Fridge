@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -33,7 +34,11 @@ import android.widget.TimePicker;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.StringTokenizer;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DatePickerDialog.OnDateSetListener {
@@ -45,15 +50,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static Context context;
     private static int hour;
     private static int min;
+    private int order;
 private static MenuItem itemM;
     private foodListAdapter adapter;
-    private  String date;
     private DbAdapter dbHelper;
 
+    private  String date;
         private static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
+
+
 
 private static void clearAlarms(Context contextI) {
 
@@ -140,18 +148,18 @@ public static void showDatePickerDialog() {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        order=0;
         super.onCreate(savedInstanceState);
         MainActivity.context=getApplicationContext();
         date  =  getString(R.string.Expire);
         man = getFragmentManager();
+
         foodClientel = new foodClient(this);
         foodClientel.doBindService();
         setContentView(R.layout.activity_main);
         SharedPreferences prefs = getSharedPreferences(Activity.class.getSimpleName(), Context.MODE_PRIVATE);
         hour = prefs.getInt("hour", 10);
         min = prefs.getInt("min", 0);
-
 
 
 
@@ -356,9 +364,104 @@ public void removeOnClickHandler(View v) {
 
         }
 
+        else if (id == R.id.nav_sort) {
+
+            ArrayList<String> previous;
+
+            adapter.clear();
+            dbHelper = new DbAdapter(this);
+
+                order=1;
+
+            previous= new ArrayList<>();
+
+            dbHelper.open();
+            Cursor cursor = dbHelper.fetchAll();
+
+            if (cursor != null && cursor.moveToFirst()) {
+
+
+                do {
+
+                    String name = cursor.getString(1);
+                    String dateRestore = cursor.getString(2);
+                    foodItem items= new foodItem(name, dateRestore);
+                    items.setPosition(Long.parseLong(cursor.getString(0)));
+                    adapter.insert(items, getPosit(dateRestore, previous));
+
+
+                } while (cursor.moveToNext());
+            }
+            order=0;
+            dbHelper.close();
+
+        }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    int getPosit(String date, ArrayList previous){
+
+        int i;
+        if(order==0)
+        {
+            return 0;
+        }
+
+         if (!(Character.isDigit(date.charAt(0)))) {
+            previous.add(0,date);
+            return 0;
+        }
+         if(previous.size()==0)
+        {
+            previous.add(0,date);
+            return 0;
+        }
+        else{
+        for(i=0;i<previous.size();i++){
+            if(prev(date, (String) previous.get(i)))
+            {
+                previous.add(i,date);
+                return i;
+            }
+        }
+             previous.add(i,date);
+            return i;
+    }
+
+    }
+
+    private boolean prev(String date, String prev) {
+        if (!(Character.isDigit(prev.charAt(0)))) {
+            return false;
+        }
+        Calendar cur = tokenize(date);
+        Calendar pre = tokenize(prev);
+
+        if(cur.before(pre)){
+            return true;
+        }
+
+        return false;
+    }
+
+    private Calendar tokenize(String date) {
+        StringTokenizer tokens = new StringTokenizer(date, "/");
+        String first = tokens.nextToken();
+        String second = tokens.nextToken();
+        String third = tokens.nextToken();
+        third = third.replace(" ", "");
+
+        int yr = Integer.parseInt(third);
+        int monthOfYear = Integer.parseInt(second);
+        int dayOfMonth = Integer.parseInt(first);
+        Calendar alarm = Calendar.getInstance();
+
+
+        alarm.set(yr, monthOfYear, dayOfMonth);
+        return alarm;
     }
 
     private void share() {

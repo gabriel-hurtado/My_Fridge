@@ -10,12 +10,20 @@
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/Notif" />
+
+        <item
+            android:id="@+id/nav_sort"
+            android:icon="@drawable/ic_sort_black_24dp"
+            android:title="@string/Sort" />
+
         <item
             android:id="@+id/nav_share"
             android:actionProviderClass=
                 "android.widget.ShareActionProvider"
             android:icon="@drawable/ic_menu_share"
             android:title="@string/Share" />
+
+
     </group>
 
 </menu>

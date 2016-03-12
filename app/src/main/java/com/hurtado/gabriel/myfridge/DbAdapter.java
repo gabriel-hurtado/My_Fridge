@@ -100,6 +100,8 @@ class DbAdapter {
         return mDb.update(SQLITE_TABLE, args, KEY_ROWID + "=" + rowId, null);
     }
 
+
+
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
         DatabaseHelper(Context context) {

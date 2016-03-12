@@ -20,4 +20,5 @@
     <string name="Your">"Votre "</string>
     <string name="Will">" va expirer !"</string>
     <string name="Exp">"Expire le : "</string>
+    <string name="Sort">Trier par date de péremption</string>
 </resources>
