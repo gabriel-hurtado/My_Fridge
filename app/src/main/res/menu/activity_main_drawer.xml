@@ -13,7 +13,7 @@
 
         <item
             android:id="@+id/nav_sort"
-            android:icon="@drawable/ic_sort_black_24dp"
+            android:icon="@drawable/ic_sort_variant_black_24dp"
             android:title="@string/Sort" />
 
         <item

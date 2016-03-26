@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.hurtado.gabriel.myfridge.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:showIn="@layout/app_bar_main"
+    android:background="#e1dede">
 
 
     <ListView
@@ -14,6 +15,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:descendantFocusability="beforeDescendants"
+        android:divider="#FFCC00"
+        android:dividerHeight="0px"
         tools:listitem="@layout/item">
 
     </ListView>
