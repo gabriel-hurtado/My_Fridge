@@ -14,7 +14,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -29,7 +28,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static Context context;
     private static int hour;
     private static int min;
+    private TextView emptyText;
     private int order;
 private static MenuItem itemM;
     private foodListAdapter adapter;
@@ -161,6 +163,7 @@ public static void showDatePickerDialog() {
         hour = prefs.getInt("hour", 10);
         min = prefs.getInt("min", 0);
 
+        emptyText = (TextView) findViewById(R.id.textView);
 
 
         dbHelper = new DbAdapter(this);
@@ -181,8 +184,9 @@ public static void showDatePickerDialog() {
             public void onClick(View view) {
 
                 adapter.insert(new foodItem("", date), 0);
-                Snackbar.make(view, R.string.ItemAdded, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                emptyText.setVisibility(View.INVISIBLE);
+                Toast.makeText(getApplicationContext(), getString(R.string.ItemAdded), Toast.LENGTH_SHORT).show();
+
 
             }
         });
@@ -235,11 +239,16 @@ public static void showDatePickerDialog() {
         }
         dbHelper.close();
 
+        if(adapter.isEmpty()){
+            emptyText.setVisibility(View.VISIBLE);
+        }
 
 
         finishedLoading= true;
 
     }
+
+
 
     private void setupUI(View view) {
 
@@ -277,10 +286,15 @@ public void removeOnClickHandler(View v) {
         dbHelper.close();
         hideSoftKeyboard(MainActivity.this);
         clearAlarms(context);
-        Snackbar.make(v, R.string.Deleted, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+
+    Toast.makeText(getApplicationContext(), getString(R.string.Deleted), Toast.LENGTH_SHORT).show();
+
 
         dbHelper.close();
+
+        if(adapter.isEmpty()){
+            emptyText.setVisibility(View.VISIBLE);
+        }
     }
 
         private void setupListViewAdapter() {
@@ -313,7 +327,7 @@ public void removeOnClickHandler(View v) {
             dbHelper.deleteAll();
             dbHelper.close();
             adapter.clear();
-
+            emptyText.setVisibility(View.VISIBLE);
 
             SharedPreferences prefs = getSharedPreferences(Activity.class.getSimpleName(), Context.MODE_PRIVATE);
             int notificationNumber = prefs.getInt("notificationNumber", 0);

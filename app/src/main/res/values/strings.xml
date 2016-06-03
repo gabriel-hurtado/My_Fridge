@@ -20,4 +20,5 @@
     <string name="Will">" will expire !"</string>
     <string name="Exp">"Expires : "</string>
     <string name="Sort">Sort by expiration date</string>
+    <string name="add_something_to_your_fridge">Add something to your fridge ! (+ below)</string>
 </resources>

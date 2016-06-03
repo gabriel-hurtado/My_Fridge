@@ -142,4 +142,5 @@ class foodListAdapter extends ArrayAdapter<foodItem> {
         ImageButton removePaymentButton;
     }
 
+
 }
